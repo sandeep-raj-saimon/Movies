@@ -1,6 +1,35 @@
 <!-- templates/base.html -->
-<header>
-<a href="{% url 'home' %}">Home</a> | <a href="{% url 'about' %}">About</a>
-</header>
+<head>
+</head>
+<div align="center">
+	<h1>MOVIES HUB</h1>
+</div>
+<head>
+	<style>
+		ul {
+		  list-style-type: none;
+		  margin: 0;
+		  padding: 0;
+		  overflow: hidden;
+		  background-color: #dddddd;
+		}
+
+		li {
+		  float: left;
+		}
+
+		li a {
+		  display: block;
+		  padding: 8px;
+		}
+	</style>
+</head>
+<body>	
+	<ul >
+		<li><a href="{% url 'home' %}">Home</a></li>
+		<li><a href="{% url 'about' %}">About</a></li>
+		<li><a href="{% url 'login' %}">Login</a></li>
+	</ul>
+</body>
 {% block content %}
 {% endblock content %}

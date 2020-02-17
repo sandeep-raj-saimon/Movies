@@ -1,4 +1,20 @@
 <!-- templates/home.html -->
 {% extends 'base.html' %}
 {% block content %}
+	
+	{% if flag %}
+		<h2>Hello {{ user }}</h2>
+	{% endif %}
+	</head> 
+	<body> 
+	  
+		{% for movie in movies_images %} 
+				<div class="col-md-4"> 
+					{{ movie.name }} 
+					<img src="{{ movie.movie_Img.url }}" class="img-responsive" style="width: 60%; float: left; margin-right: 5px;" /> 
+				</div> 
+		{% endfor %} 
+	  
+	</body> 
+	</html> 
 {% endblock content %}

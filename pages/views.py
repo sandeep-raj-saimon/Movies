@@ -5,14 +5,22 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from pages.forms import UserForm
+from pages.forms import UserForm,MoviesForm
+from pages.models import *
+#from django.core.urlresolvers import reverse
 
 """class HomePageView(TemplateView):
 	template_name = 'home.html'"""
 
 class HomePageView(TemplateView):
     def get(self, request, *args, **kwargs):
-        return render(request, "home.html")
+        if request.method == 'GET': 
+  
+        # getting all the objects of hotel. 
+            Movies_images = Movies_poster.objects.all()
+            
+            return render(request, "home.html",{'movies_images' : Movies_images})
+            #return render(request,'home.html')
 		
 class AboutPageView(TemplateView):
 	def get(self, request, *args, **kwargs):
@@ -29,11 +37,24 @@ class LoginPageView(TemplateView):
 		if request.method == 'POST':
 			username = request.POST.get('username')
 			password = request.POST.get('password')
+			flag = False
+			admin = False
+			
 			user = authenticate(username=username, password=password)
 			if user:
 				if user.is_active:
+					flag= True
 					login(request,user)
-					return HttpResponseRedirect(reverse('home'))
+					
+					if username=="sandy" and password=="Sandeep@1997":
+						url=reverse('upload')
+						return HttpResponseRedirect(url)						
+					else:
+						url = reverse('home')
+						#url = reverse('home', kwargs={'user': username,'flag':flag})
+						#print(username,flag)
+						return HttpResponseRedirect(url)
+					
 				else:
 					return HttpResponse("Your account was inactive.")
 			else:
@@ -71,8 +92,24 @@ class RegisterPageView(TemplateView):
 		
 		return render(request,'register.html',{'user_form':user_form,'registered':registered})
 
-#new
-
+class UploadPageView(TemplateView):
+	def get(self,request,*args,**kwargs):
+		movies_form = MoviesForm()
+		return render(request,'upload.html',{'movies_form':movies_form})
+		
+	def post(self,request,*args,**kwargs):
+		if request.method == 'POST': 
+			form = MoviesForm(request.POST, request.FILES) 
+	  
+			if form.is_valid(): 
+				form.save() 
+				return HttpResponse('success') 
+		else:
+			form = HotelForm() 
+			return render(request,'upload',{'form':form})
+	
+	
+			
 @login_required
 def special(request):
     return HttpResponse("You are logged in !")

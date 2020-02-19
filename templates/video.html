@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	{% if flag %}
+		<h6>Hello {{ person }}</h6>
+		{% for movie in movies_images %} 
+			<div class="col-md-4"> 
+				<video height="400" width="1320" poster="{{ movie.movie_Img.url }}" controls>
+					<source src="{{ movie.video.url }}" type='video/mp4'>
+					Your browser does not support the video tag.
+				</video>
+			</div>
+					
+		{% endfor %}
+	{% endif %}
+				
+{% endblock content %}

@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'resume.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'users',
+        'NAME': 'sandeep',
     }
 }
 

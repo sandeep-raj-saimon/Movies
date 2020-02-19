@@ -12,4 +12,4 @@ class UserForm(forms.ModelForm):
 class MoviesForm(forms.ModelForm):
     class Meta():
         model = Movies_poster
-        fields = ('name', 'movie_Img')
+        fields = ('name', 'movie_Img','video')

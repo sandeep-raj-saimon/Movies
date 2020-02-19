@@ -9,5 +9,7 @@ class UserProfileInfo(models.Model):
 
 class Movies_poster(models.Model): 
     name = models.CharField(max_length=50) 
+    #link = models.CharField(max_length=50) 
+    
     movie_Img = models.ImageField(upload_to='images/')
-	
+    video = models.FileField(upload_to='videos/',default='')

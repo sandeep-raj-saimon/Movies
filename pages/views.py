@@ -11,6 +11,8 @@ from pages.models import *
 
 """class HomePageView(TemplateView):
 	template_name = 'home.html'"""
+flag = False
+person = None
 
 class HomePageView(TemplateView):
     def get(self, request, *args, **kwargs):
@@ -18,8 +20,7 @@ class HomePageView(TemplateView):
   
         # getting all the objects of hotel. 
             Movies_images = Movies_poster.objects.all()
-            
-            return render(request, "home.html",{'movies_images' : Movies_images})
+            return render(request, "home.html",{'movies_images' : Movies_images,'flag':flag,'person':person})
             #return render(request,'home.html')
 		
 class AboutPageView(TemplateView):
@@ -30,6 +31,7 @@ class AboutPageView(TemplateView):
 
 class LoginPageView(TemplateView):
 	def get(self, request, *args, **kwargs):
+		print(args,kwargs)
 		return render(request,"login.html")
 	
 	#new
@@ -37,13 +39,15 @@ class LoginPageView(TemplateView):
 		if request.method == 'POST':
 			username = request.POST.get('username')
 			password = request.POST.get('password')
-			flag = False
-			admin = False
 			
 			user = authenticate(username=username, password=password)
 			if user:
 				if user.is_active:
-					flag= True
+					global flag
+					global person
+					
+					flag=True
+					person = username
 					login(request,user)
 					
 					if username=="sandy" and password=="Sandeep@1997":
@@ -51,7 +55,7 @@ class LoginPageView(TemplateView):
 						return HttpResponseRedirect(url)						
 					else:
 						url = reverse('home')
-						#url = reverse('home', kwargs={'user': username,'flag':flag})
+						#url = reverse('home',{'user': username,'flag':flag})
 						#print(username,flag)
 						return HttpResponseRedirect(url)
 					
@@ -106,9 +110,21 @@ class UploadPageView(TemplateView):
 				return HttpResponse('success') 
 		else:
 			form = HotelForm() 
-			return render(request,'upload',{'form':form})
+			return render(request,'upload.html',{'form':form})
 	
-	
+class VideoPageView(TemplateView):
+	def get(self,request,*args,**kwargs):
+		movie_name = kwargs['movie_name']
+		Movies_images = Movies_poster.objects.all().filter(name=movie_name)
+		#print(Movies_images)
+		
+		
+		if flag==True:
+			return render(request, "video.html",{'movies_images' : Movies_images,'flag':flag,'person':person})
+		else:
+			message="Login to continue"
+			#return HttpResponse('Login to continue')
+			return render(request,"login.html",{"flag":True,"message":message})
 			
 @login_required
 def special(request):

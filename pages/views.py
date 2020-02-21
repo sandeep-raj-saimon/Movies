@@ -114,6 +114,7 @@ class UploadPageView(TemplateView):
 	
 class VideoPageView(TemplateView):
 	def get(self,request,*args,**kwargs):
+		print(args,kwargs)
 		movie_name = kwargs['movie_name']
 		Movies_images = Movies_poster.objects.all().filter(name=movie_name)
 		#print(Movies_images)
@@ -122,9 +123,11 @@ class VideoPageView(TemplateView):
 		if flag==True:
 			return render(request, "video.html",{'movies_images' : Movies_images,'flag':flag,'person':person})
 		else:
-			message="Login to continue"
+			"""message="Login to continue"
 			#return HttpResponse('Login to continue')
-			return render(request,"login.html",{"flag":True,"message":message})
+			return render(request,"login.html")"""
+			url = reverse('login')
+			return HttpResponseRedirect(url)
 			
 @login_required
 def special(request):

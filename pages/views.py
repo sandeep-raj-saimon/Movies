@@ -9,8 +9,6 @@ from pages.forms import UserForm,MoviesForm
 from pages.models import *
 #from django.core.urlresolvers import reverse
 
-"""class HomePageView(TemplateView):
-	template_name = 'home.html'"""
 flag = False
 person = None
 

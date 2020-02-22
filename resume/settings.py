@@ -25,7 +25,7 @@ SECRET_KEY = 'onv47#$ak$8bq&&0!h39!*2l^dvm73pulg7ukg2&v3okpo*x77'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'resume.wsgi.application'
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
-}"""
+}
 
 ##  MongoDB has been used for this project.
 DATABASES = {
@@ -87,7 +87,17 @@ DATABASES = {
         'ENGINE': 'djongo',
         'NAME': 'sandeep',
     }
+}"""
+DATABASES = {
+        'default': {
+        'ENGINE': 'djongo',
+        'NAME': 'sandeep',
+        'HOST': 'mongodb+srv://Sandeep1997:Sandeep1997@movies-8krg1.mongodb.net/test?retryWrites=true&w=majority',
+        'USER': 'Sandeep1997',
+        'PASSWORD': 'Sandeep1997',
+    }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators

@@ -48,7 +48,7 @@ class LoginPageView(TemplateView):
 					person = username
 					login(request,user)
 					
-					if username=="sandy" and password=="Sandeep@1997":
+					if username=="Sandeep@1997" and password=="Sandeep@1997":
 						url=reverse('upload')
 						return HttpResponseRedirect(url)						
 					else:

@@ -74,20 +74,21 @@ WSGI_APPLICATION = 'resume.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-"""DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
+"""
 ##  MongoDB has been used for this project.
 DATABASES = {
     'default': {
-        'ENGINE': 'djongo',
+        'ENGINE': 'django.db.backends.djongo',
         'NAME': 'sandeep',
     }
-}"""
+}
+
 DATABASES = {
         'default': {
         'ENGINE': 'djongo',
@@ -96,7 +97,7 @@ DATABASES = {
         'USER': 'Sandeep1997',
         'PASSWORD': 'Sandeep1997',
     }
-}
+}"""
 
 
 # Password validation

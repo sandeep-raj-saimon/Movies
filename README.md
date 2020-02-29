@@ -1,3 +1,3 @@
 It is a full stack python project using Django Framework along with Sqlite3 for Database.
-https://sandymovies.herokuapp.com/ 
+https://sandeepmovies.herokuapp.com/
 Work is still pending....

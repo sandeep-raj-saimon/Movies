@@ -3,7 +3,9 @@
 {% block content %}
 	<html>
 	<style>
-
+		img {
+		  border-radius: 8px;
+		}
 	</style>
 	</head>
 	<body>
@@ -27,7 +29,7 @@
 						
 						<!--<a onclick="func('movie.name');">-->
 						<a href="{% url 'video' movie.name %}">
-						<img src="{{ movie.movie_Img.url }}" class="img-responsive" style="width: 50%; float: left; margin-right: 5px;" />
+						<img src="{{ movie.movie_Img.url }}" width="200" height="250"/>
 						</a>
 					</br>
 

@@ -7,13 +7,18 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from pages.forms import UserForm,MoviesForm
 from pages.models import *
-#from django.core.urlresolvers import reverse
+from django.template.response import TemplateResponse
+
+#for multi-threading
+import threading
+
 
 flag = False
 person = None
 
 class HomePageView(TemplateView):
     def get(self, request, *args, **kwargs):
+        print(args,kwargs)
         if request.method == 'GET': 
   
         # getting all the objects of hotel. 
@@ -29,7 +34,7 @@ class AboutPageView(TemplateView):
 
 class LoginPageView(TemplateView):
 	def get(self, request, *args, **kwargs):
-		print(args,kwargs)
+		#print(args,kwargs)
 		return render(request,"login.html")
 	
 	#new
@@ -50,11 +55,12 @@ class LoginPageView(TemplateView):
 					
 					if username=="Sandeep@1997" and password=="Sandeep@1997":
 						url=reverse('upload')
-						return HttpResponseRedirect(url)						
+						args={"flag":flag,"user":person}
+						return TemplateResponse(request, 'base.html',args)
 					else:
-						url = reverse('home')
-						#url = reverse('home',{'user': username,'flag':flag})
-						#print(username,flag)
+						#url = reverse('home')
+						url = reverse('home',{'user': username,'flag':flag})
+						print(username,flag,"here")
 						return HttpResponseRedirect(url)
 					
 				else:
@@ -121,9 +127,10 @@ class VideoPageView(TemplateView):
 		if flag==True:
 			return render(request, "video.html",{'movies_images' : Movies_images,'flag':flag,'person':person})
 		else:
-			"""message="Login to continue"
-			#return HttpResponse('Login to continue')
-			return render(request,"login.html")"""
+			message="Login to continue"
+			#url = reverse('home',{'user': username,'flag':flag})
+			#print(username,flag,"here")
+			#return HttpResponseRedirect(url)
 			url = reverse('login')
 			return HttpResponseRedirect(url)
 			

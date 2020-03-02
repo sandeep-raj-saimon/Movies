@@ -19,21 +19,58 @@
 		  display: block;
 		  padding: 8px;
 		}
+		.topnav .search-container {
+		  float: right;
+		}
+
+		.topnav input[type=text] {
+		  padding: 6px;
+		  margin-top: 5px;
+		  font-size: 10px;
+		  border: none;
+		}
+
+		.topnav .search-container button {
+		  float: right;
+		  padding: 6px 10px;
+		  margin-top: 4px;
+		  margin-right: 16px;
+		  background: #ddd;
+		  font-size: 17px;
+		  border: none;
+		  cursor: pointer;
+		}
+
+		.topnav .search-container button:hover {
+		  background: #ccc;
+		}
 	</style>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 </body>
 	<div class='w3-container top' align="center">
-	  <h1><a class='w3schools-logo notranslate' href='home'>MOVIES HUB</a></h1>
+	  <h1><a class='w3schools-logo notranslate'>MOVIES HUB</a></h1>
 	  <h2><div class='w3-right w3-hide-small w3-wide toptext' style="font-family:'Segoe UI',Arial,sans-serif">WATCH MOVIES ONLINE</div></h2>
 	</div>
 </body>
-<body>	
+<body>
+	
 	<ul >
 		<li><a href="{% url 'home' %}">Home</a></li>
 		<li><a href="{% url 'about' %}">About</a></li>
 		<li><a href="{% url 'login' %}">Login</a></li>
 		<li><a href="{% url 'register' %}">Register</a></li>
+		
+			<div class="topnav" align="right">
+			  <div class="search-container">
+				<form>
+				  <input type="text" placeholder="Search.." name="search">
+				  <button type="submit"><i class="fa fa-search"></i></button>
+				</form>
+			  </div>
+			</div>
+		
 	</ul>
 </body>
 {% block content %}

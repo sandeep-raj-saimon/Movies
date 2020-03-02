@@ -1,7 +1,7 @@
 # pages/views.py
 from django.views.generic import TemplateView
 from django.urls import path, include,reverse
-from django.shortcuts import render
+from django.shortcuts import render,render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -56,6 +56,7 @@ class LoginPageView(TemplateView):
 					if username=="Sandeep@1997" and password=="Sandeep@1997":
 						url=reverse('upload')
 						args={"flag":flag,"user":person}
+						#print(say_hello())
 						return TemplateResponse(request, 'base.html',args)
 					else:
 						#url = reverse('home')
@@ -127,12 +128,10 @@ class VideoPageView(TemplateView):
 		if flag==True:
 			return render(request, "video.html",{'movies_images' : Movies_images,'flag':flag,'person':person})
 		else:
-			message="Login to continue"
-			#url = reverse('home',{'user': username,'flag':flag})
-			#print(username,flag,"here")
-			#return HttpResponseRedirect(url)
+			"""message="Login to continue"
 			url = reverse('login')
-			return HttpResponseRedirect(url)
+			return HttpResponseRedirect(url)"""
+			return HttpResponse("Login to Continue")
 			
 @login_required
 def special(request):

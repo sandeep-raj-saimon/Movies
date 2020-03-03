@@ -55,9 +55,7 @@ class LoginPageView(TemplateView):
 					
 					if username=="Sandeep@1997" and password=="Sandeep@1997":
 						url=reverse('upload')
-						args={"flag":flag,"user":person}
-						#print(say_hello())
-						return TemplateResponse(request, 'base.html',args)
+						return HttpResponseRedirect(url)						
 					else:
 						#url = reverse('home')
 						url = reverse('home',{'user': username,'flag':flag})

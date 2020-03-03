@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	
+		{% for match in matches %} 
+			<a href="{% url 'video' match.name %}">
+				<img src="{{ match.movie_Img.url }}" width="200" height="250"/>
+			</a>
+					
+		{% endfor %}
+	
+				
+{% endblock content %}

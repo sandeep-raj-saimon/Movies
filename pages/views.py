@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from pages.forms import UserForm,MoviesForm
 from pages.models import *
 from django.template.response import TemplateResponse
-
+from django.db.models import Q
 #for multi-threading
 import threading
 
@@ -18,7 +18,7 @@ person = None
 
 class HomePageView(TemplateView):
     def get(self, request, *args, **kwargs):
-        print(args,kwargs)
+        #print(args,kwargs)
         if request.method == 'GET': 
   
         # getting all the objects of hotel. 
@@ -119,7 +119,7 @@ class UploadPageView(TemplateView):
 	
 class VideoPageView(TemplateView):
 	def get(self,request,*args,**kwargs):
-		print(args,kwargs)
+		#print(args,kwargs)
 		movie_name = kwargs['movie_name']
 		Movies_images = Movies_poster.objects.all().filter(name=movie_name)
 		#print(Movies_images)
@@ -132,6 +132,22 @@ class VideoPageView(TemplateView):
 			url = reverse('login')
 			return HttpResponseRedirect(url)"""
 			return HttpResponse("Login to Continue")
+
+class SearchPageView(TemplateView):
+	def post(self,request,*args,**kwargs):
+		if request.method=='POST':
+			search = request.POST['search']
+			
+			if search:
+				match = Movies_poster.objects.all().filter(Q(name__icontains=search))
+				print(match)
+				if match:
+					return render(request,"search.html",{"matches":match})
+				else:
+					return render(request,"base.html",{"no_movie":"No Movie Exists"})
+			else:
+				return render(request,"base.html",{"invalid_search":"invalid_search"})
+				
 			
 @login_required
 def special(request):

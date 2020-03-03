@@ -55,7 +55,6 @@
 	</div>
 </body>
 <body>
-	
 	<ul >
 		<li><a href="{% url 'home' %}">Home</a></li>
 		<li><a href="{% url 'about' %}">About</a></li>
@@ -64,9 +63,12 @@
 		
 			<div class="topnav" align="right">
 			  <div class="search-container">
-				<form>
-				  <input type="text" placeholder="Search.." name="search">
-				  <button type="submit"><i class="fa fa-search"></i></button>
+				<form method="post" action="search/">
+					{% csrf_token %}
+					  <input type="text" placeholder="Search.." name="search">
+					  <a href="{% url 'search'%}">
+						<button type="submit"><i class="fa fa-search" value="Search"></i></button>
+					  </a>
 				</form>
 			  </div>
 			</div>

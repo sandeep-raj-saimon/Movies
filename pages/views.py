@@ -15,6 +15,7 @@ import threading
 
 flag = False
 person = None
+message = None
 
 class HomePageView(TemplateView):
     def get(self, request, *args, **kwargs):
@@ -35,8 +36,14 @@ class AboutPageView(TemplateView):
 class LoginPageView(TemplateView):
 	def get(self, request, *args, **kwargs):
 		#print(args,kwargs)
-		return render(request,"login.html")
-	
+		if request.method == 'GET':
+			
+			if message is None:
+				return render(request,"login.html")
+			else:
+				return render(request,"login.html",{'message':message})
+		
+			
 	#new
 	def post(self,request,*args,**kwargs):
 		if request.method == 'POST':
@@ -126,10 +133,10 @@ class VideoPageView(TemplateView):
 		if flag==True:
 			return render(request, "video.html",{'movies_images' : Movies_images,'flag':flag,'person':person})
 		else:
-			"""message="Login to continue"
+			global message
+			message = "Login to continue"
 			url = reverse('login')
-			return HttpResponseRedirect(url)"""
-			return HttpResponse("Login to Continue")
+			return HttpResponseRedirect(url)
 
 class SearchPageView(TemplateView):
 	def post(self,request,*args,**kwargs):

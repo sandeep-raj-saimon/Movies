@@ -57,9 +57,9 @@ class LoginPageView(TemplateView):
 						url=reverse('upload')
 						return HttpResponseRedirect(url)						
 					else:
-						#url = reverse('home')
-						url = reverse('home',{'user': username,'flag':flag})
-						print(username,flag,"here")
+						url = reverse('home')
+						#url = reverse('home',{'user': username,'flag':flag})
+						#print(username,flag)
 						return HttpResponseRedirect(url)
 					
 				else:

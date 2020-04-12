@@ -21,12 +21,12 @@ class HomePageView(TemplateView):
     def get(self, request, *args, **kwargs):
         #print(args,kwargs)
         if request.method == 'GET': 
-  
+		
         # getting all the objects of hotel. 
+            print(person,flag)
             Movies_images = Movies_poster.objects.all()
             return render(request, "home.html",{'movies_images' : Movies_images,'flag':flag,'person':person})
-            #return render(request,'home.html')
-		
+            
 class AboutPageView(TemplateView):
 	def get(self, request, *args, **kwargs):
 	
@@ -58,7 +58,8 @@ class LoginPageView(TemplateView):
 					
 					flag=True
 					person = username
-					login(request,user)
+					
+					request.session['username']=username
 					
 					if username=="Sandeep@1997" and password=="Sandeep@1997":
 						url=reverse('upload')
@@ -78,7 +79,21 @@ class LoginPageView(TemplateView):
 		else:
 			return render(request, 'login.html', {})
 			
+class LogoutPageView(TemplateView):
+	def get(self,request,*args,**kwargs):
+		try:
+			del request.session['username']
 			
+			global flag
+			global person
+			
+			flag=False
+			person = None
+			
+		except:
+			pass
+		return HttpResponse("<strong>You are logged out.</strong>")
+		
 class RegisterPageView(TemplateView):
 	
 	#new
@@ -127,8 +142,6 @@ class VideoPageView(TemplateView):
 		#print(args,kwargs)
 		movie_name = kwargs['movie_name']
 		Movies_images = Movies_poster.objects.all().filter(name=movie_name)
-		#print(Movies_images)
-		
 		
 		if flag==True:
 			return render(request, "video.html",{'movies_images' : Movies_images,'flag':flag,'person':person})

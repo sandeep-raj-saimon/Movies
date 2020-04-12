@@ -1,8 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
+	<html>
+	<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+	
+	</style>
+	</head>
 	{% if flag %}
-		<h6 style="color:white;">Hello {{ person }}</h6>
+		<h6>Hello {{ person }}</h6>
 		{% for movie in movies_images %} 
 			<div class="col-md-4"> 
 				<video height="400" width="1320" poster="{{ movie.movie_Img.url }}" controls>

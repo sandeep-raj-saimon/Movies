@@ -1,17 +1,26 @@
 {% extends 'base.html' %}
 {% block content %}
 <html lang="en"> 
-<head> 
-    <meta charset="UTF-8"> 
-    <title>Hotel_image</title> 
-</head> 
-<body> 
-    <form method = "post" enctype="multipart/form-data"> 
-        {% csrf_token %} 
-        {{ movies_form.as_p }} 
-        <button type="submit">Upload</button> 
-    </form>
-	
+<style>
+	.form{
+		float:left;
+		margin-top:0px;
+		margin-bottom:100px;
+		margin-left:40%;
+		margin-right:0%;
+		background-color:lightblue;
+		color:black;
+	}
+</style>
+<body>
+	<div class="form">
+		<h1 align="center">Welcome Admin!!!</h1>
+		<form method = "post" enctype="multipart/form-data"> 
+			{% csrf_token %} 
+			{{ movies_form.as_p }} 
+			<button type="submit">Upload</button> 
+		</form>
+	</div>
 </body> 
 </html> 
 {% endblock %}

@@ -9,9 +9,7 @@ from pages.forms import UserForm,MoviesForm
 from pages.models import *
 from django.template.response import TemplateResponse
 from django.db.models import Q
-#for multi-threading
 import threading
-
 
 flag = False
 person = None
@@ -23,7 +21,7 @@ class HomePageView(TemplateView):
         if request.method == 'GET': 
 		
         # getting all the objects of hotel. 
-            print(person,flag)
+            #print(person,flag)
             Movies_images = Movies_poster.objects.all()
             return render(request, "home.html",{'movies_images' : Movies_images,'flag':flag,'person':person})
             
@@ -38,11 +36,14 @@ class LoginPageView(TemplateView):
 		#print(args,kwargs)
 		if request.method == 'GET':
 			
+			users = User.objects.all()
+			print("here",users)
+			
 			if message is None:
 				return render(request,"login.html")
 			else:
 				return render(request,"login.html",{'message':message})
-		
+
 			
 	#new
 	def post(self,request,*args,**kwargs):
@@ -61,6 +62,13 @@ class LoginPageView(TemplateView):
 					
 					request.session['username']=username
 					
+					for key,value in request.session.items():
+						print(key,value)
+						
+					print("view")
+					for key, value in request.session.items():
+						print('{} => {}'.format(key, value))
+					print("end")
 					if username=="Sandeep@1997" and password=="Sandeep@1997":
 						url=reverse('upload')
 						return HttpResponseRedirect(url)						
@@ -84,6 +92,10 @@ class LogoutPageView(TemplateView):
 		try:
 			del request.session['username']
 			
+			print("logout")
+			for key,value in request.session.items():
+				print(key,value)
+				
 			global flag
 			global person
 			
@@ -158,7 +170,7 @@ class SearchPageView(TemplateView):
 			
 			if search:
 				match = Movies_poster.objects.all().filter(Q(name__icontains=search))
-				print(match)
+				#print(match)
 				if match:
 					return render(request,"search.html",{"matches":match})
 				else:
@@ -166,13 +178,3 @@ class SearchPageView(TemplateView):
 			else:
 				return render(request,"base.html",{"invalid_search":"invalid_search"})
 				
-			
-@login_required
-def special(request):
-    return HttpResponse("You are logged in !")
-	
-@login_required
-def user_logout(request):
-    logout(request)
-    return HttpResponseRedirect(reverse('home'))
-

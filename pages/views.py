@@ -104,7 +104,9 @@ class LogoutPageView(TemplateView):
 			
 		except:
 			pass
-		return HttpResponse("<strong>You are logged out.</strong>")
+		#return HttpResponse("<strong>You are logged out.</strong>")
+		url = reverse('home')
+		return HttpResponseRedirect(url)
 		
 class RegisterPageView(TemplateView):
 	

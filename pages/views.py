@@ -2,7 +2,7 @@
 from django.views.generic import TemplateView
 from django.urls import path, include,reverse
 from django.shortcuts import render,render_to_response
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from pages.forms import UserForm,MoviesForm
@@ -17,7 +17,7 @@ message = None
 
 class HomePageView(TemplateView):
     def get(self, request, *args, **kwargs):
-        #print(args,kwargs)
+        
         if request.method == 'GET': 
 		
         # getting all the objects of hotel. 
@@ -180,3 +180,13 @@ class SearchPageView(TemplateView):
 			else:
 				return render(request,"base.html",{"invalid_search":"invalid_search"})
 				
+#for cookies
+def setcookie(request):  
+    response = HttpResponse("Cookie Set")  
+    response.set_cookie(person, 'movieshub')  
+    return response  
+	
+	
+def getcookie(request):  
+    temp  = request.COOKIES[person]  
+    return HttpResponse("MoviesHub @: "+  temp);  

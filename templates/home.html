@@ -33,10 +33,9 @@
 		{% for movie in movies_images %} 
 			<div class="inner">
 						
-						<a href="{% url 'video' movie.name %}">
-						<img src="{{ movie.movie_Img.url }}" width="200" height="250"/>
-						</a>
-						
+				<a href="{% url 'video' movie.name %}">
+					<img src="{{ movie.movie_Img.url }}" width="180" height="225"/>
+				</a>	
 			</div>
 		{% endfor %}
 	</div>

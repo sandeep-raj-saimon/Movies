@@ -1,8 +1,9 @@
 # pages/views.py
 from django.views.generic import TemplateView
 from django.urls import path, include,reverse
-from django.shortcuts import render,render_to_response
+from django.shortcuts import render,render_to_response,redirect
 from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
+from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from pages.forms import UserForm,MoviesForm
@@ -10,14 +11,21 @@ from pages.models import *
 from django.template.response import TemplateResponse
 from django.db.models import Q
 import threading
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.template.loader import render_to_string
+from .tokens import account_activation_token
+from django.contrib.auth.models import User
+from django.core.mail import EmailMessage
 
 flag = False
 person = None
 message = None
+idi = None
 
 class HomePageView(TemplateView):
     def get(self, request, *args, **kwargs):
-        
+     
         if request.method == 'GET': 
 		
         # getting all the objects of hotel. 
@@ -36,8 +44,9 @@ class LoginPageView(TemplateView):
 		#print(args,kwargs)
 		if request.method == 'GET':
 			
-			users = User.objects.all()
-			print("here",users)
+			"""users = User.objects.all()
+			for user in users:
+				print(len(user.username),":",len(user.password))"""
 			
 			if message is None:
 				return render(request,"login.html")
@@ -52,6 +61,7 @@ class LoginPageView(TemplateView):
 			password = request.POST.get('password')
 			
 			user = authenticate(username=username, password=password)
+			
 			if user:
 				if user.is_active:
 					global flag
@@ -59,25 +69,17 @@ class LoginPageView(TemplateView):
 					
 					flag=True
 					person = username
-					
-					request.session['username']=username
-					
-					for key,value in request.session.items():
-						print(key,value)
-						
-					print("view")
-					for key, value in request.session.items():
-						print('{} => {}'.format(key, value))
-					print("end")
+								
 					if username=="Sandeep@1997" and password=="Sandeep@1997":
 						url=reverse('upload')
-						return HttpResponseRedirect(url)						
+						return HttpResponseRedirect(url)
+			
 					else:
 						url = reverse('home')
 						#url = reverse('home',{'user': username,'flag':flag})
 						#print(username,flag)
 						return HttpResponseRedirect(url)
-					
+						
 				else:
 					return HttpResponse("Your account was inactive.")
 			else:
@@ -121,19 +123,37 @@ class RegisterPageView(TemplateView):
 	def post(self,request,*args,**kwargs):
 		registered = False
 		if request.method == 'POST':
-			user_form = UserForm(data=request.POST)
+			form = UserForm(data=request.POST)
 			
-			if user_form.is_valid():
-				user = user_form.save()
-				user.set_password(user.password)
-				user.save()
-				registered = True
+			if form.is_valid():
+				user = form.save()
+				#user.is_active = False
+				#print(user.password)
+				#user.save()
+							
+				current_site = get_current_site(request)
+				mail_subject = 'Activate your blog account.'
+				message = render_to_string('acc_active_email.html', {
+					'user': user,
+					'domain': current_site.domain,
+					'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+					'token':account_activation_token.make_token(user),
+				})
+				to_email = form.cleaned_data.get('email')
+				email = EmailMessage(
+							mail_subject, message, to=[to_email]
+				)
+				email.send()
+				#registered = True
+				#print("registered")
+				return HttpResponse('Please confirm your email address to complete the registration')
 			else:
-				print(user_form.errors)
+				print(form.errors)
 		else:
 			user_form = UserForm()
 		
-		return render(request,'register.html',{'user_form':user_form,'registered':registered})
+		#return render(request,'register.html',{'user_form':user_form,'registered':registered})
+		return render(request,'register.html',{'user_form':form})
 
 class UploadPageView(TemplateView):
 	def get(self,request,*args,**kwargs):
@@ -180,13 +200,52 @@ class SearchPageView(TemplateView):
 			else:
 				return render(request,"base.html",{"invalid_search":"invalid_search"})
 				
+#for activating the account
+def activate(request, uidb64, token):
+    uidb64 = str.encode(uidb64)[2:5]
+    
+    #print(idi==uidb64)
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+        #print(uid,user)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    
+    if user is not None and account_activation_token.check_token(user, token):
+        #print("password",user.password,len(user.password))
+        user.set_password(user.password)
+        user.save()
+        user.is_active = True
+        #login(request, user)
+        # return redirect('home')
+        return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+    else:
+        return HttpResponse('Activation link is invalid!')
+		
+"""		
 #for cookies
-def setcookie(request):  
-    response = HttpResponse("Cookie Set")  
-    response.set_cookie(person, 'movieshub')  
-    return response  
-	
-	
-def getcookie(request):  
-    temp  = request.COOKIES[person]  
-    return HttpResponse("MoviesHub @: "+  temp);  
+def setcookie(request):
+    html = HttpResponse("<h1>Dataflair Django Tutorial</h1>")
+    if request.COOKIES.get('visits'):
+        html.set_cookie('dataflair', 'Welcome Back')
+        value = int(request.COOKIES.get('visits'))
+        html.set_cookie('visits', value + 1)
+    else:
+        value = 1
+        text = "Welcome for the first time"
+        html.set_cookie('visits', value)
+        html.set_cookie('dataflair', text)
+    return html
+
+def showcookie(request):
+    if request.COOKIES.get('visits') is not None:
+        value = request.COOKIES.get('visits')
+        text = request.COOKIES.get('dataflair')
+        html = HttpResponse("<center><h1>{0}<br>You have requested this page {1} times</h1></center>".format(text, value))
+        html.set_cookie('visits', int(value) + 1)
+        return html
+    else:
+        print("show cookie")
+        return redirect('/setcookie')
+"""

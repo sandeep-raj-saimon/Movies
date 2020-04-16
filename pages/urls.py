@@ -15,4 +15,7 @@ path('search/', SearchPageView.as_view(), name='search'),
 #path('video/',VideoPageView.as_view(),name='video'),
 #path('login/', auth_views.LoginView.as_view(template_name='accounts/login.html'), name='login'),
 path('', HomePageView.as_view(), name='home'),
+#path('setcookie', setcookie),
+#path('getcookie', showcookie),
+path(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',activate, name='activate'),
 ]

@@ -21,11 +21,10 @@ from django.core.mail import EmailMessage
 flag = False
 person = None
 message = None
-idi = None
 
 class HomePageView(TemplateView):
     def get(self, request, *args, **kwargs):
-     
+        print(flag,person)
         if request.method == 'GET': 
 		
         # getting all the objects of hotel. 
@@ -94,21 +93,23 @@ class LogoutPageView(TemplateView):
 		try:
 			del request.session['username']
 			
-			print("logout")
+			#print("logout")
 			for key,value in request.session.items():
 				print(key,value)
-				
-			global flag
-			global person
-			
-			flag=False
-			person = None
 			
 		except:
 			pass
-		#return HttpResponse("<strong>You are logged out.</strong>")
-		url = reverse('home')
-		return HttpResponseRedirect(url)
+			
+		global flag
+		global person
+		
+		flag = False
+		person = None
+			
+		print(flag,person)
+		return HttpResponse("<strong>You are logged out.</strong>")
+		#url = reverse('home')
+		#return HttpResponseRedirect(url)
 		
 class RegisterPageView(TemplateView):
 	

@@ -8,6 +8,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from pages.forms import UserForm,MoviesForm
 from pages.models import *
+import datetime
+from django.template import RequestContext
 from django.template.response import TemplateResponse
 from django.db.models import Q
 import threading
@@ -24,7 +26,21 @@ message = None
 
 class HomePageView(TemplateView):
     def get(self, request, *args, **kwargs):
-        print(flag,person)
+        username = request.COOKIES['username']
+        last_connection = request.COOKIES['last_connection']
+        last_connection_time = datetime.datetime.strptime(last_connection[:-7],'%Y-%m-%d %H:%M:%S')
+        print(last_connection_time-datetime.datetime.now())
+		
+        if (datetime.datetime.now() - last_connection_time).seconds < 10:
+            pass
+        else:
+            #print("not logged in")
+            global flag
+            global person
+			
+            flag = False
+            person = None
+						
         if request.method == 'GET': 
 		
         # getting all the objects of hotel. 
@@ -71,14 +87,19 @@ class LoginPageView(TemplateView):
 								
 					if username=="Sandeep@1997" and password=="Sandeep@1997":
 						url=reverse('upload')
-						return HttpResponseRedirect(url)
+						response = HttpResponseRedirect(url)
+						#return url
+						#response = render_to_response(request,'about.html',{"username":username})
 			
 					else:
 						url = reverse('home')
-						#url = reverse('home',{'user': username,'flag':flag})
-						#print(username,flag)
-						return HttpResponseRedirect(url)
+						response= HttpResponseRedirect(url)
 						
+						#response = render_to_response(request,'about.html',{"username":username})
+					response.set_cookie('last_connection',datetime.datetime.now())
+					response.set_cookie('username',datetime.datetime.now())
+					
+					return response
 				else:
 					return HttpResponse("Your account was inactive.")
 			else:
@@ -93,23 +114,17 @@ class LogoutPageView(TemplateView):
 		try:
 			del request.session['username']
 			
-			#print("logout")
-			for key,value in request.session.items():
-				print(key,value)
+			global flag
+			global person
+			
+			flag = False
+			person = None
 			
 		except:
 			pass
 			
-		global flag
-		global person
-		
-		flag = False
-		person = None
-			
 		print(flag,person)
 		return HttpResponse("<strong>You are logged out.</strong>")
-		#url = reverse('home')
-		#return HttpResponseRedirect(url)
 		
 class RegisterPageView(TemplateView):
 	

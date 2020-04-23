@@ -24,29 +24,39 @@ flag = False
 person = None
 message = None
 
+class IndexPageView(TemplateView):
+	def get(self,request,*args,**kwargs):
+		return render(request,"index.html")
+		
 class HomePageView(TemplateView):
     def get(self, request, *args, **kwargs):
-        username = request.COOKIES['username']
-        last_connection = request.COOKIES['last_connection']
-        last_connection_time = datetime.datetime.strptime(last_connection[:-7],'%Y-%m-%d %H:%M:%S')
-        print(last_connection_time-datetime.datetime.now())
+        
+        global flag
+        global person
 		
-        if (datetime.datetime.now() - last_connection_time).seconds < 10:
-            pass
-        else:
-            #print("not logged in")
-            global flag
-            global person
-			
-            flag = False
-            person = None
-						
-        if request.method == 'GET': 
-		
-        # getting all the objects of hotel. 
-            #print(person,flag)
+        if 'username' not in request.COOKIES:
+            		
             Movies_images = Movies_poster.objects.all()
             return render(request, "home.html",{'movies_images' : Movies_images,'flag':flag,'person':person})
+			
+        else:
+            print("yes")
+            username = request.COOKIES['username']
+            last_connection = request.COOKIES['last_connection']
+            last_connection_time = datetime.datetime.strptime(last_connection[:-7],'%Y-%m-%d %H:%M:%S')
+            print(last_connection_time-datetime.datetime.now())
+		
+            if (datetime.datetime.now() - last_connection_time).seconds < 10:
+                pass
+            else:
+                
+                flag = False
+                person = None
+							
+            if request.method == 'GET': 
+			
+                Movies_images = Movies_poster.objects.all()
+                return render(request, "home.html",{'movies_images' : Movies_images,'flag':flag,'person':person})
             
 class AboutPageView(TemplateView):
 	def get(self, request, *args, **kwargs):

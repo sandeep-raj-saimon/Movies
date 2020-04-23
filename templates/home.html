@@ -2,43 +2,45 @@
 {% extends 'base.html' %}
 {% block content %}
 	<html>
-	<style>
-		img {
-		  border-radius: 10px;
-		  margin: 0;
-		}
-		.container{
-		margin-top:0px;
-		margin-bottom:0px;
-		margin-left:0%;
-		margin-right:10%;
-		}
-		.inner{
-		float:left;
-		margin-top:0px;
-		margin-bottom:10px;
-		margin-left:0%;
-		margin-right:2%;
-		background-color: white;
-		color: black;
-		}
-	</style>
-	</head>
-	<body>
-	{% if flag %}
-		<h6 style="color:white;">You are logged in as:<strong> {{ person }} </strong></h6>
-	{% endif %}
-	
-	<div class="container" >
-		{% for movie in movies_images %} 
-			<div class="inner">
-						
-				<a href="{% url 'video' movie.name %}">
-					<img src="{{ movie.movie_Img.url }}" width="180" height="225"/>
-				</a>	
+		<head>
+			<style>
+				img {
+				  border-radius: 10px;
+				  margin: 0;
+				}
+				.container{
+				margin-top:0px;
+				margin-bottom:0px;
+				margin-left:0%;
+				margin-right:10%;
+				}
+				.inner{
+				float:left;
+				margin-top:0px;
+				margin-bottom:10px;
+				margin-left:0%;
+				margin-right:2%;
+				background-color: white;
+				color: black;
+				}
+			</style>
+		</head>
+		<body>
+			{% if flag %}
+				<h6 style="color:white;">You are logged in as:<strong> {{ person }} </strong></h6>
+			{% endif %}
+			
+			<div class="container" >
+				{% for movie in movies_images %} 
+					<div class="inner">
+								
+						<a href="{% url 'video' movie.name %}">
+							<img src="{{ movie.movie_Img.url }}" width="180" height="225"/>
+						</a>	
+					</div>
+				{% endfor %}
 			</div>
-		{% endfor %}
-	</div>
-	</body> 
+			
+		</body> 
 	</html> 
 {% endblock content %}

@@ -1,5 +1,7 @@
 <html lang="en">
 <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<style>
 		body { 
 			margin: 0; 
@@ -30,7 +32,69 @@
 		   background-color: none;
 		   border:2px solid black;
 		}
-		
+		body {
+		  font-family: Arial, Helvetica, sans-serif;
+		}
+
+		.navbar {
+		  overflow: hidden;
+		  background-color: #333;
+		}
+
+		.navbar a {
+		  float: left;
+		  font-size: 16px;
+		  color: white;
+		  text-align: center;
+		  padding: 10px 16px;
+		  text-decoration: none;
+		}
+
+		.dropdown {
+		  float: left;
+		  overflow: hidden;
+		}
+
+		.dropdown .dropbtn {
+		  font-size: 16px;  
+		  border: none;
+		  outline: none;
+		  color: white;
+		  padding: 5px 16px;
+		  background-color: inherit;
+		  font-family: inherit;
+		  margin: 0;
+		}
+
+		.navbar a:hover, .dropdown:hover .dropbtn {
+		  background-color: black;
+		}
+
+		.dropdown-content {
+		  display: none;
+		  position: absolute;
+		  background-color: #f9f9f9;
+		  min-width: 100px;
+		  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+		  z-index: 1;
+		}
+
+		.dropdown-content a {
+		  float: none;
+		  color: black;
+		  padding: 12px 16px;
+		  text-decoration: none;
+		  display: block;
+		  text-align: left;
+		}
+
+		.dropdown-content a:hover {
+		  background-color: #ddd;
+		}
+
+		.dropdown:hover .dropdown-content {
+		  display: block;
+		}
 	</style>
 	<meta charset="UTF-8">
 	<meta name ="viewport" content="width-device-width,initial-scale=1.0">
@@ -44,21 +108,19 @@
 				 <h2>Movies</h2>
 			</div>
 		</a>
-		<a href="{% url 'login' %}">
-			<div class="Otherlink">
-				 <h6>Login</h6>
+		
+		<div class="navbar">
+		  <div class="dropdown">
+			<button class="dropbtn">Dropdown 
+			  <i class="fa fa-caret-down"></i>
+			</button>
+			<div class="dropdown-content">
+			  <a href="{% url 'login' %}">Login</a>
+			  <a href="{% url 'register' %}">Register</a>
+			  <a href="{% url 'about' %}">About</a>
 			</div>
-		</a>
-		<a href="{% url 'register' %}">
-			<div class="Otherlink">
-				 <h6>Regsiter</h6>
-			</div>
-		</a>
-		<a href="{% url 'about' %}">
-			<div class="Otherlink">
-				 <h6>About</h6>
-			</div>
-		</a>
+		  </div> 
+		</div>
 	</h1>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
